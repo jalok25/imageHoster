@@ -47,7 +47,7 @@ public class ImageRepository {
     }
 
     //The method creates an instance of EntityManager
-    //Executes JPQL query to fetch the image from the database with corresponding title
+    //Executes JPQL query to fetch the image from the database with corresponding id and title
     //Returns the image in case the image is found in the database
     //Returns null if no image is found in the database
     public Image getImageByIdAndTitle(Integer id, String title) {
