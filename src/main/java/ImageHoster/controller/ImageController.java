@@ -94,7 +94,7 @@ public class ImageController {
     //The method first needs to convert the list of all the tags to a string containing all the tags separated by a comma and then add this string in a Model type object
     //This string is then displayed by 'edit.html' file as previous tags of an image
     @RequestMapping(value = "/editImage")
-    public String editImage(@RequestParam("imageId") Integer imageId, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String editImage(@RequestParam("imageId") Integer imageId, Model model, HttpSession session) {
         Image image = imageService.getImage(imageId);
         if(imageService.imageOwner(imageId, session)) {
             String tags = convertTagsToString(image.getTags());
@@ -103,10 +103,11 @@ public class ImageController {
             return "images/edit";
         }
         else {
-            String title = image.getTitle();
             String errorMessage = "Only the owner of the image can edit the image";
-            redirectAttributes.addFlashAttribute("editError", errorMessage);
-            return "redirect:/images/" + imageId + '/' + title;
+            model.addAttribute("image", image);
+            model.addAttribute("tags", image.getTags());
+            model.addAttribute("editError", errorMessage);
+            return "images/image";
         }
     }
 
@@ -149,17 +150,18 @@ public class ImageController {
     //The method calls the deleteImage() method in the business logic passing the id of the image to be deleted
     //Looks for a controller method with request mapping of type '/images'
     @RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
-    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId,Model model, HttpSession session) {
         Image image = imageService.getImage(imageId);
         if(imageService.imageOwner(imageId, session)) {
             imageService.deleteImage(imageId);
             return "redirect:/images";
         }
         else {
-            String title = image.getTitle();
             String errorMessage = "Only the owner of the image can delete the image";
-            redirectAttributes.addFlashAttribute("deleteError", errorMessage);
-            return "redirect:/images/" + imageId + '/' + title;
+            model.addAttribute("image", image);
+            model.addAttribute("tags", image.getTags());
+            model.addAttribute("deleteError", errorMessage);
+            return "images/image";
         }
     }
 
