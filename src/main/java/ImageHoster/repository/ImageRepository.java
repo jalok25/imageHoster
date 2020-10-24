@@ -1,9 +1,11 @@
 package ImageHoster.repository;
 
 import ImageHoster.model.Image;
+import ImageHoster.model.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 //The annotation is a special type of @Component annotation which describes that the class defines a data repository
@@ -112,4 +114,19 @@ public class ImageRepository {
         }
     }
 
+    //This function gets the id and session info as agrs and validate the Image Owner id with the
+    //current user id. If it matches it return true else false.
+    public boolean imageOwner(Integer imageId, HttpSession session) {
+        EntityManager em = emf.createEntityManager();
+        TypedQuery<Image> typedQuery = em.createQuery("SELECT i from Image i where i.id =:imageId", Image.class).setParameter("imageId", imageId);
+        Image image = typedQuery.getSingleResult();
+        Integer ownerId = image.getUser().getId();
+        User loggedInUser = (User) session.getAttribute("loggeduser");
+        if(ownerId == loggedInUser.getId()) {
+            return  true;
+        }
+        else  {
+            return false;
+        }
+    }
 }

@@ -5,6 +5,7 @@ import ImageHoster.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,4 +47,9 @@ public class ImageService {
         imageRepository.deleteImage(imageId);
     }
 
+    //The method calls the imageOwner() method in the Repository and passes the Image id of the image
+    //and the session info to validate the current user is the owner of the image.
+    public boolean imageOwner(Integer imageId, HttpSession session) {
+        return imageRepository.imageOwner(imageId, session);
+    }
 }
