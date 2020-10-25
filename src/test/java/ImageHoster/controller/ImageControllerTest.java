@@ -179,7 +179,7 @@ public class ImageControllerTest {
         List<Tag> tags = new ArrayList<>();
         tags.add(tag);
         image.setTags(tags);
-
+        Mockito.when(imageService.imageOwner(image.getId(), session)).thenReturn(true);
         Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
 
         this.mockMvc.perform(get("/editImage")
@@ -224,7 +224,7 @@ public class ImageControllerTest {
         image.setDescription("This image is for testing purpose");
         image.setUser(user1);
 
-
+        Mockito.when(imageService.imageOwner(image.getId(), session)).thenReturn(false);
         Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
 
         this.mockMvc.perform(get("/editImage")
@@ -255,7 +255,7 @@ public class ImageControllerTest {
         image.setTitle("new");
         image.setDescription("This image is for testing purpose");
         image.setUser(user);
-
+        Mockito.when(imageService.imageOwner(image.getId(), session)).thenReturn(true);
         Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
 
         this.mockMvc.perform(delete("/deleteImage")
@@ -299,7 +299,7 @@ public class ImageControllerTest {
         image.setDescription("This image is for testing purpose");
         image.setUser(user1);
 
-
+        Mockito.when(imageService.imageOwner(image.getId(), session)).thenReturn(false);
         Mockito.when(imageService.getImage(Mockito.anyInt())).thenReturn(image);
 
         this.mockMvc.perform(delete("/deleteImage")
